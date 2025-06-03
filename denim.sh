@@ -7,7 +7,7 @@ Arguments in parantheses are not required.
 Created by Tage Rosenqvist, 2025."
 
 # Read options and corresponding values
-while getopts "f:r:d:o:t:n:w:" option; do
+while getopts "f:r:d:o:t:n:w:h:" option; do
 case "$option" in
 f) READ_1=${OPTARG} ;; # Forward reads
 r) READ_2=${OPTARG} ;; # Reverse reads
