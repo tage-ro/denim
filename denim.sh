@@ -6,30 +6,52 @@ Using the dev-version of UNITE may allow assembly of ITS-adjacent regions, possi
 Arguments in parantheses are not required.
 Created by Tage Rosenqvist, 2025."
 
+# Return help
+if [ "$1" == "-h" ]; then
+echo "$USAGE"
+exit
+fi
+
+# Default values
+THREADS=8
+N_READS=10000000
+TMP_DIR=-1
+
 # Read options and corresponding values
-while getopts ":hfrdotnw:" option; do
+while getopts ":f:r:d:o:t:n:w:" option; do
 case "$option" in
-h) echo "$USAGE"
-  exit;; # Return help
 f) READ_1=${OPTARG} ;; # Forward reads
 r) READ_2=${OPTARG} ;; # Reverse reads
 d) DATABASE=${OPTARG} ;; # Database in .fasta format
 o) OUTPUT_DIR=${OPTARG} ;; # Output directory
-t) THREADS=${OPTARG:=16} ;; # Number of threads to use (default = 16 threads)
-n) N_READS=${OPTARG:=10000000} ;; # Number of reads to process (default = 10 000 000 reads)
-w) TMP_DIR=${OPTARG:=${OUTPUT_DIR}/tmp} ;; # Temporary working directory (default = tmp directory in output directory)
+t) THREADS=${OPTARG} ;; # Number of threads to use (default = 16 threads)
+n) N_READS=${OPTARG} ;; # Number of reads to process (default = 10 000 000 reads)
+w) TMP_DIR=${OPTARG} ;; # Temporary working directory
 esac
 done
 
+# Check if output folder exists, otherwise make it
+if [ -d "${OUTPUT_DIR}" ]; then
+echo "Output folder exists at" $OUTPUT_DIR
+else
+echo "Creating output folder at" $OUTPUT_DIR
+mkdir $OUTPUT_DIR
+fi
+
+# Check if working directory was given, otherwise put it in the output folders
+if [ "${TMP_DIR}" == -1 ]; then
+TMP_DIR=${OUTPUT_DIR}/tmp
+fi
+
 # Check if temporary folder exists, otherwise make it
 if [ -d "${TMP_DIR}" ]; then
-echo "Temporary folder exists at " $TMP_DIR
+echo "Temporary folder exists at" $TMP_DIR
 else
-echo "Creating temporary folder at " $TMP_DIR
+echo "Creating temporary folder at" $TMP_DIR
 mkdir $TMP_DIR
 fi
 
-# Abort if output folder already exists for this file, otherwise continue
+# Abort if output already exists for this file, otherwise continue
 NAME=$(basename "${READ_1%_*}")
 OUT=${OUTPUT_DIR}/${NAME}
 
@@ -56,7 +78,7 @@ spades.py --meta -t $(($THREADS/2)) -m $(($THREADS*2)) -1 ${TMP_DIR}/${NAME}_map
 ITSx --cpu $THREADS -i ${OUT}/spades/contigs.fasta -o ${OUT}/${NAME}
 
 # Remove temporary files
-rm ${TMP_DIR}/${NAME}_proc* ${TMP_DIR}/${NAME}_mapped*
+rm -r ${TMP_DIR}
 
 echo "Finished analysis of " $NAME " on " $(date)
 
