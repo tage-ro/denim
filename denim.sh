@@ -7,7 +7,7 @@ Arguments in parantheses are not required.
 Created by Tage Rosenqvist, 2025."
 
 # Read options and corresponding values
-while getopts "h:f:r:d:o:t:n:w:" option; do
+while getopts ":hfrdotnw:" option; do
 case "$option" in
 h) echo $USAGE
   exit;; # Return help
