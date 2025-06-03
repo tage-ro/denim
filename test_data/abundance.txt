@@ -1,0 +1,2 @@
+GCA_020085045.1_PO-1_genomic_noN.fna	0.5
+GCA_000002855.2_ASM285v2_genomic_noN.fna	0.5
