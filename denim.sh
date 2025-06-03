@@ -1,7 +1,19 @@
 #!/bin/sh
 
+if [[ "$1" == "-h" || "$1" == "--help" ]]; then
+  echo "Usage: denim.sh -f FORWARD_READS -r REVERSE_READS -d DATABASE_DIRECTORY -o OUTPUT_DIRECTORY (-t THREADS -n N_READS -w WORKING_DIRECTORY)
+  
+  Forward and reverse reads can be in fastq or fastq.gz format. The ITS database should be in fasta format. 
+  
+  Using the dev-version of UNITE may allow assembly of ITS-adjacent regions, possibly increasing the likelyhood of attaining full-length ITS sequences.
+  
+  Arguments in parantheses are not required.
+  
+  Created by Tage Rosenqvist, 2025."
+fi
+
 # Read options and corresponding values
-while getopts "f:r:d:" option; do
+while getopts "f:r:d:o:t:n:w:" option; do
 case "$option" in
 f) READ_1=${OPTARG} ;; # Forward reads
 r) READ_2=${OPTARG} ;; # Reverse reads
