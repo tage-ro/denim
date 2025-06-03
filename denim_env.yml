@@ -2,7 +2,7 @@ name: denim
 channels:
 - bioconda
 dependencies:
-- fastp=0.25.0=bioconda
-- bbmap=39.26=bioconda
-- spades=4.2.0=bioconda
-- itsx=1.1.3=bioconda
+- fastp=0.25.0
+- bbmap=39.26
+- spades=4.2.0
+- itsx=1.1.3
