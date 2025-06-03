@@ -7,8 +7,10 @@ Arguments in parantheses are not required.
 Created by Tage Rosenqvist, 2025."
 
 # Read options and corresponding values
-while getopts "f:r:d:o:t:n:w:h:" option; do
+while getopts "h:f:r:d:o:t:n:w:" option; do
 case "$option" in
+h) echo $USAGE
+  exit;; # Return help
 f) READ_1=${OPTARG} ;; # Forward reads
 r) READ_2=${OPTARG} ;; # Reverse reads
 d) DATABASE=${OPTARG} ;; # Database in .fasta format
@@ -16,7 +18,6 @@ o) OUTPUT_DIR=${OPTARG} ;; # Output directory
 t) THREADS=${OPTARG:=16} ;; # Number of threads to use (default = 16 threads)
 n) N_READS=${OPTARG:=10000000} ;; # Number of reads to process (default = 10 000 000 reads)
 w) TMP_DIR=${OPTARG:=${OUTPUT_DIR}/tmp} ;; # Temporary working directory (default = tmp directory in output directory)
-h) echo $USAGE ;; # Return help
 esac
 done
 
