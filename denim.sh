@@ -1,16 +1,10 @@
 #!/bin/sh
 
-if [[ "$1" == "-h" || "$1" == "--help" ]]; then
-  echo "Usage: denim.sh -f FORWARD_READS -r REVERSE_READS -d DATABASE_DIRECTORY -o OUTPUT_DIRECTORY (-t THREADS -n N_READS -w WORKING_DIRECTORY)
-  
-  Forward and reverse reads can be in fastq or fastq.gz format. The ITS database should be in fasta format. 
-  
-  Using the dev-version of UNITE may allow assembly of ITS-adjacent regions, possibly increasing the likelyhood of attaining full-length ITS sequences.
-  
-  Arguments in parantheses are not required.
-  
-  Created by Tage Rosenqvist, 2025."
-fi
+USAGE="Usage: denim.sh -f FORWARD_READS -r REVERSE_READS -d DATABASE_DIRECTORY -o OUTPUT_DIRECTORY (-t THREADS -n N_READS -w WORKING_DIRECTORY)
+Forward and reverse reads can be in fastq or fastq.gz format. The ITS database should be in fasta format. 
+Using the dev-version of UNITE may allow assembly of ITS-adjacent regions, possibly increasing the likelyhood of attaining full-length ITS sequences.
+Arguments in parantheses are not required.
+Created by Tage Rosenqvist, 2025."
 
 # Read options and corresponding values
 while getopts "f:r:d:o:t:n:w:" option; do
@@ -22,6 +16,7 @@ o) OUTPUT_DIR=${OPTARG} ;; # Output directory
 t) THREADS=${OPTARG:=16} ;; # Number of threads to use (default = 16 threads)
 n) N_READS=${OPTARG:=10000000} ;; # Number of reads to process (default = 10 000 000 reads)
 w) TMP_DIR=${OPTARG:=${OUTPUT_DIR}/tmp} ;; # Temporary working directory (default = tmp directory in output directory)
+h) echo $USAGE ;; # Return help
 esac
 done
 
