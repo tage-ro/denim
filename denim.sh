@@ -9,7 +9,7 @@ Created by Tage Rosenqvist, 2025."
 # Read options and corresponding values
 while getopts ":hfrdotnw:" option; do
 case "$option" in
-h) echo $USAGE
+h) echo "$USAGE"
   exit;; # Return help
 f) READ_1=${OPTARG} ;; # Forward reads
 r) READ_2=${OPTARG} ;; # Reverse reads
