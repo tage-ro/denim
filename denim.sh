@@ -1,34 +1,52 @@
 #!/bin/sh
 
-USAGE="Usage: denim.sh -f FORWARD_READS -r REVERSE_READS -d DATABASE_DIRECTORY -o OUTPUT_DIRECTORY (-t THREADS -n N_READS -w WORKING_DIRECTORY)
+# Help message
+USAGE="Usage: denim.sh -f FORWARD_READS -r REVERSE_READS -d DATABASE_DIRECTORY [-o OUTPUT_DIRECTORY -t THREADS -n N_READS -w WORKING_DIRECTORY]
 Forward and reverse reads can be in fastq or fastq.gz format. The ITS database should be in fasta format. 
 Using the dev-version of UNITE may allow assembly of ITS-adjacent regions, possibly increasing the likelyhood of attaining full-length ITS sequences.
 Arguments in parantheses are not required.
 Created by Tage Rosenqvist, 2025."
-
-# Return help
-if [ "$1" == "-h" ]; then
+if [ "$1" == "-h" ]; then # Return help
 echo "$USAGE"
 exit
 fi
+
 
 # Default values
 THREADS=8
 N_READS=10000000
 TMP_DIR=-1
+OUTPUT_DIR="denim_out"
 
 # Read options and corresponding values
-while getopts ":f:r:d:o:t:n:w:" option; do
+while getopts "f:r:d:o:t:n:w:" option; do
 case "$option" in
 f) READ_1=${OPTARG} ;; # Forward reads
 r) READ_2=${OPTARG} ;; # Reverse reads
 d) DATABASE=${OPTARG} ;; # Database in .fasta format
-o) OUTPUT_DIR=${OPTARG} ;; # Output directory
-t) THREADS=${OPTARG} ;; # Number of threads to use (default = 16 threads)
-n) N_READS=${OPTARG} ;; # Number of reads to process (default = 10 000 000 reads)
+o) OUTPUT_DIR=${OPTARG} ;; # Output directory (default = denim_out)
+t) THREADS=${OPTARG} ;; # Number of threads to use (default = 8 threads)
+n) N_READS=${OPTARG} ;; # Number of reads to process (default = 10 000 000 read pairs)
 w) TMP_DIR=${OPTARG} ;; # Temporary working directory
+\?) echo "Unknown input option" $option ;;
 esac
 done
+
+# Check if input files exist
+if [ ! -f "$READ_1" ]; then
+echo "No forward reads detected."
+exit
+fi
+
+if [ ! -f "$READ_2" ]; then
+echo "No reverse reads detected."
+exit
+fi
+
+if [ ! -f "$DATABASE" ]; then
+echo "No database detected."
+exit
+fi
 
 # Check if output folder exists, otherwise make it
 if [ -d "${OUTPUT_DIR}" ]; then
