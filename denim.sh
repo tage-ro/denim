@@ -6,6 +6,7 @@ Forward and reverse reads can be in fastq or fastq.gz format. The ITS database s
 Using the dev-version of UNITE may allow assembly of ITS-adjacent regions, possibly increasing the likelyhood of attaining full-length ITS sequences.
 Arguments in parantheses are not required.
 Created by Tage Rosenqvist, 2025."
+
 if [ "$1" == "-h" ]; then # Return help
 echo "$USAGE"
 exit
@@ -28,23 +29,24 @@ o) OUTPUT_DIR=${OPTARG} ;; # Output directory (default = denim_out)
 t) THREADS=${OPTARG} ;; # Number of threads to use (default = 8 threads)
 n) N_READS=${OPTARG} ;; # Number of reads to process (default = 10 000 000 read pairs)
 w) TMP_DIR=${OPTARG} ;; # Temporary working directory
-\?) echo "Unknown input option" $option ;;
+*) echo "Unrecognized input option given. Stopping analysis."
+exit;;
 esac
 done
 
 # Check if input files exist
 if [ ! -f "$READ_1" ]; then
-echo "No forward reads detected."
+echo "No forward reads detected. Stopping analysis."
 exit
 fi
 
 if [ ! -f "$READ_2" ]; then
-echo "No reverse reads detected."
+echo "No reverse reads detected. Stopping analysis."
 exit
 fi
 
 if [ ! -f "$DATABASE" ]; then
-echo "No database detected."
+echo "No database detected. Stopping analysis"
 exit
 fi
 
