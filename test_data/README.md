@@ -1,4 +1,4 @@
-Some test data you can try, generated using [InSilicoSeq](https://github.com/HadrienG/InSilicoSeq). It composed of 700 000 reads, generated from the refseq genomes of an oomycete (Pythium oligandrum) and a fungus (Aspergillus niger). In this data, they are equally abundant.
+Some test data you can try, generated using [InSilicoSeq](https://github.com/HadrienG/InSilicoSeq). It composed of 700 000 reads, generated from the refseq genomes of an oomycete (*Pythium oligandrum*) and a fungus (*Aspergillus niger*). In this data, they are equally abundant.
 * https://www.ncbi.nlm.nih.gov/datasets/genome/GCA_020085045.1/
 * https://www.ncbi.nlm.nih.gov/datasets/genome/GCF_000002855.4/
 
