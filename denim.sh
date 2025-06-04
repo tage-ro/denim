@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Help message
-USAGE="Usage: denim.sh -f FORWARD_READS -r REVERSE_READS -d DATABASE_DIRECTORY [-o OUTPUT_DIRECTORY -t THREADS -n N_READS -w WORKING_DIRECTORY]
+USAGE="Usage: denim.sh -f FORWARD_READS -r REVERSE_READS -d DATABASE_FILE [-o OUTPUT_DIRECTORY -t THREADS -n N_READS -w WORKING_DIRECTORY]
 Forward and reverse reads can be in fastq or fastq.gz format. The ITS database should be in fasta format. 
 Using the dev-version of UNITE may allow assembly of ITS-adjacent regions, possibly increasing the likelyhood of attaining full-length ITS sequences.
 Arguments in parantheses are not required.
@@ -28,7 +28,7 @@ d) DATABASE=${OPTARG} ;; # Database in .fasta format
 o) OUTPUT_DIR=${OPTARG} ;; # Output directory (default = denim_out)
 t) THREADS=${OPTARG} ;; # Number of threads to use (default = 8 threads)
 n) N_READS=${OPTARG} ;; # Number of reads to process (default = 10 000 000 read pairs)
-w) TMP_DIR=${OPTARG} ;; # Temporary working directory
+w) TMP_DIR=${OPTARG} ;; # Temporary working directory (default tmp directory in output directory)
 *) echo "Unrecognized input option given. Stopping analysis."
 exit;;
 esac
