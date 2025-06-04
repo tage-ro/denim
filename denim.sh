@@ -57,8 +57,10 @@ OUT=${OUTPUT_DIR}/${NAME}
 
 if [ -d "${OUT}" ]; then
 echo ${NAME} " directory already exists, skipping."
+exit
 else
 mkdir ${OUT}
+fi
 
 echo "Starting analysis of " $NAME " on " $(date)
 
@@ -81,5 +83,3 @@ ITSx --cpu $THREADS -i ${OUT}/spades/contigs.fasta -o ${OUT}/${NAME}
 rm -r ${TMP_DIR}
 
 echo "Finished analysis of " $NAME " on " $(date)
-
-fi
