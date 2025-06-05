@@ -1,10 +1,21 @@
 #!/bin/sh
 
 # Help message
-USAGE="Usage: denim.sh -f FORWARD_READS -r REVERSE_READS -d DATABASE_FILE [-o OUTPUT_DIRECTORY -t THREADS -n N_READS -w WORKING_DIRECTORY]
-Forward and reverse reads can be in fastq or fastq.gz format. The ITS database should be in fasta format. 
-Using the dev-version of UNITE may allow assembly of ITS-adjacent regions, possibly increasing the likelyhood of attaining full-length ITS sequences.
-Arguments in parantheses are not required.
+USAGE="Usage: denim.sh -f FORWARD_READS -r REVERSE_READS -d DATABASE_FILE [-o OUTPUT_DIRECTORY -t THREADS -n N_READS -w WORKING_DIRECTORY -c]
+Required arguments:
+-f Forward reads in fastq/fastq.gz format
+-r Reverse reads in fastq/fastq.gz format
+-d ITS database in fasta format
+
+Optional arguments:
+-o Output directory (default = denim_out in current directory)
+-t Threads to use (default = 8)
+-n Reads pairs to process (default = 10 000 000)
+-w Working directory (default = output_director/tmp)
+-c Filter out complete (not bordering contig edges) ITS1/ITS2 sequences (default = not executed)
+
+Using the dev-version of the UNITE database may allow assembly of ITS-adjacent regions, possibly increasing the likelyhood of attaining full-length ITS sequences.
+
 Created by Tage Rosenqvist, 2025."
 
 if [ "$1" == "-h" ]; then # Return help
@@ -104,9 +115,10 @@ ITSx --cpu $THREADS -i ${OUT}/spades/contigs.fasta -o ${OUT}/${NAME}
 # Remove temporary files
 rm -r ${TMP_DIR}
 
+# Filter out ITS1/ITS2 sequences that were detected on edges of contigs, and may thus be incomplete (WARNING: currently slow)
 if [ $GET_COMPLETE == TRUE ]; then
 Rscript scripts/filter_partial_ITS.R ${OUT}/${NAME}.ITS1.fasta
-Rscript scripts/filter_partial_ITS.R ${OUT}/${NAME}.ITS1.fasta
+Rscript scripts/filter_partial_ITS.R ${OUT}/${NAME}.ITS2.fasta
 fi
 
 echo "Finished analysis of " $NAME " on " $(date)
