@@ -19,8 +19,8 @@ Using the dev-version of the UNITE database may allow assembly of ITS-adjacent r
 Created by Tage Rosenqvist, 2025."
 
 if [ "$1" == "-h" ]; then # Return help
-echo "$USAGE"
-exit
+  echo "$USAGE"
+  exit
 fi
 
 
@@ -33,55 +33,55 @@ GET_COMPLETE=FALSE
 
 # Read options and corresponding values
 while getopts "f:r:d:o:t:n:w:c" option; do
-case "$option" in
-f) READ_1=${OPTARG} ;; # Forward reads
-r) READ_2=${OPTARG} ;; # Reverse reads
-d) DATABASE=${OPTARG} ;; # Database in .fasta format
-o) OUTPUT_DIR=${OPTARG} ;; # Output directory (default = denim_out)
-t) THREADS=${OPTARG} ;; # Number of threads to use (default = 8 threads)
-n) N_READS=${OPTARG} ;; # Number of reads to process (default = 10 000 000 read pairs)
-w) TMP_DIR=${OPTARG} ;; # Temporary working directory (default tmp directory in output directory)
-c) GET_COMPLETE=TRUE ;;
-*) echo "Unrecognized input option given. Stopping analysis."
-exit;;
-esac
+  case "$option" in
+    f) READ_1=${OPTARG} ;; # Forward reads
+    r) READ_2=${OPTARG} ;; # Reverse reads
+    d) DATABASE=${OPTARG} ;; # Database in .fasta format
+    o) OUTPUT_DIR=${OPTARG} ;; # Output directory (default = denim_out)
+    t) THREADS=${OPTARG} ;; # Number of threads to use (default = 8 threads)
+    n) N_READS=${OPTARG} ;; # Number of reads to process (default = 10 000 000 read pairs)
+    w) TMP_DIR=${OPTARG} ;; # Temporary working directory (default tmp directory in output directory)
+    c) GET_COMPLETE=TRUE ;;
+    *) echo "Unrecognized input option given. Stopping analysis."
+    exit;;
+  esac
 done
 
 # Check if input files exist
 if [ ! -f "$READ_1" ]; then
-echo "No forward reads detected. Stopping analysis."
-exit
+  echo "No forward reads detected. Stopping analysis."
+  exit
 fi
 
 if [ ! -f "$READ_2" ]; then
-echo "No reverse reads detected. Stopping analysis."
-exit
+  echo "No reverse reads detected. Stopping analysis."
+  exit
 fi
 
 if [ ! -f "$DATABASE" ]; then
-echo "No database detected. Stopping analysis"
-exit
+  echo "No database detected. Stopping analysis"
+  exit
 fi
 
 # Check if output folder exists, otherwise make it
 if [ -d "${OUTPUT_DIR}" ]; then
-echo "Output folder exists at" $OUTPUT_DIR
+  echo "Output folder exists at" $OUTPUT_DIR
 else
-echo "Creating output folder at" $OUTPUT_DIR
-mkdir $OUTPUT_DIR
+  echo "Creating output folder at" $OUTPUT_DIR
+  mkdir $OUTPUT_DIR
 fi
 
 # Check if working directory was given, otherwise put it in the output folders
 if [ "${TMP_DIR}" == -1 ]; then
-TMP_DIR=${OUTPUT_DIR}/tmp
+  TMP_DIR=${OUTPUT_DIR}/tmp
 fi
 
 # Check if temporary folder exists, otherwise make it
 if [ -d "${TMP_DIR}" ]; then
-echo "Temporary folder exists at" $TMP_DIR
+  echo "Temporary folder exists at" $TMP_DIR
 else
-echo "Creating temporary folder at" $TMP_DIR
-mkdir $TMP_DIR
+  echo "Creating temporary folder at" $TMP_DIR
+  mkdir $TMP_DIR
 fi
 
 # Abort if output already exists for this file, otherwise continue
@@ -89,10 +89,10 @@ NAME=$(basename "${READ_1%_*}")
 OUT=${OUTPUT_DIR}/${NAME}
 
 if [ -d "${OUT}" ]; then
-echo ${NAME} " directory already exists, skipping."
-exit
+  echo ${NAME} " directory already exists, skipping."
+  exit
 else
-mkdir ${OUT}
+  mkdir ${OUT}
 fi
 
 echo "Starting analysis of " $NAME " on " $(date)
@@ -117,8 +117,8 @@ rm -r ${TMP_DIR}
 
 # Filter out ITS1/ITS2 sequences that were detected on edges of contigs, and may thus be incomplete (WARNING: currently slow)
 if [ $GET_COMPLETE == TRUE ]; then
-Rscript scripts/filter_partial_ITS.R ${OUT}/${NAME}.ITS1.fasta
-Rscript scripts/filter_partial_ITS.R ${OUT}/${NAME}.ITS2.fasta
+  Rscript scripts/filter_partial_ITS.R ${OUT}/${NAME}.ITS1.fasta
+  Rscript scripts/filter_partial_ITS.R ${OUT}/${NAME}.ITS2.fasta
 fi
 
 echo "Finished analysis of " $NAME " on " $(date)
