@@ -1,7 +1,7 @@
 # denim
 A pipeline for assembling DE-Novo Internally transcribed spacers from Metagenomes.
 
-Usage: `Usage: denim.sh -f FORWARD_READS -r REVERSE_READS -d DATABASE_FILE [-o OUTPUT_DIRECTORY -t THREADS -n N_READS -w WORKING_DIRECTORY]`
+Usage: `Usage: denim.sh -f FORWARD_READS -r REVERSE_READS -d DATABASE_FILE [-o OUTPUT_DIRECTORY -t THREADS -n N_READS -w WORKING_DIRECTORY -c]`
 
 Help: `denim.sh -h`
 # What does denim do?
@@ -41,7 +41,8 @@ bash denim.sh -f test_data/PytAspReads_R1.fastq.gz -r test_data/PytAspReads_R2.f
 For convenience, you may want to copy denim.sh to the bin-directory of your conda environment, allowing you to run it from anywhere.
 
 ```bash
-cp denim.sh /path/to/your/conda/env/denim/bin
+cp denim.sh /path/to/your/conda/env/denim/bin # Copy the denim executable
+cp scripts /path/to/your/conda/env/denim/bin # Copy the extra scripts (for using -c)
 denim.sh -h
 ```
 
@@ -51,4 +52,4 @@ Denim is developed for use on Linux systems on high performance computing cluste
 Denim is developed for paired Illumina reads from (meta)genomic samples. It will not perform well with ITS amplicon sequencing samples, use other software for these. Your mileage with transcriptomic data may vary.
 
 # Planned future additions
-* Automated filtering of potentially partial (i.e. detected at the border of a contig) ITS1/ITS2 genes.
+* Please suggest further improvements [here](https://github.com/tage-ro/denim/issues).
