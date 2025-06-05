@@ -49,3 +49,6 @@ denim.sh -h
 Denim is developed for use on Linux systems on high performance computing clusters. If you run denim on your personal computer, consider limiting the number of reads processed to 1 000 000 (`-n 1000000`).
 
 Denim is developed for paired Illumina reads from (meta)genomic samples. It will not perform well with ITS amplicon sequencing samples, use other software for these. Your mileage with transcriptomic data may vary.
+
+# Planned future additions
+* Automated filtering of potentially partial (i.e. detected at the border of a contig) ITS1/ITS2 genes.
