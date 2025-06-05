@@ -18,9 +18,10 @@ THREADS=8
 N_READS=10000000
 TMP_DIR=-1
 OUTPUT_DIR="denim_out"
+GET_COMPLETE=FALSE
 
 # Read options and corresponding values
-while getopts "f:r:d:o:t:n:w:" option; do
+while getopts "f:r:d:o:t:n:w:c" option; do
 case "$option" in
 f) READ_1=${OPTARG} ;; # Forward reads
 r) READ_2=${OPTARG} ;; # Reverse reads
@@ -29,6 +30,7 @@ o) OUTPUT_DIR=${OPTARG} ;; # Output directory (default = denim_out)
 t) THREADS=${OPTARG} ;; # Number of threads to use (default = 8 threads)
 n) N_READS=${OPTARG} ;; # Number of reads to process (default = 10 000 000 read pairs)
 w) TMP_DIR=${OPTARG} ;; # Temporary working directory (default tmp directory in output directory)
+c) GET_COMPLETE=TRUE ;;
 *) echo "Unrecognized input option given. Stopping analysis."
 exit;;
 esac
@@ -101,5 +103,10 @@ ITSx --cpu $THREADS -i ${OUT}/spades/contigs.fasta -o ${OUT}/${NAME}
 
 # Remove temporary files
 rm -r ${TMP_DIR}
+
+if [ $GET_COMPLETE == TRUE ]; then
+Rscript scripts/filter_partial_ITS.R ${OUT}/${NAME}.ITS1.fasta
+Rscript scripts/filter_partial_ITS.R ${OUT}/${NAME}.ITS1.fasta
+fi
 
 echo "Finished analysis of " $NAME " on " $(date)
