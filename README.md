@@ -52,4 +52,5 @@ Denim is developed for use on Linux systems on high performance computing cluste
 Denim is developed for paired Illumina reads from (meta)genomic samples. It will not perform well with ITS amplicon sequencing samples, use other software for these. Your mileage with transcriptomic data may vary.
 
 # Planned future additions
+* Options to lower the minimum identity in mapping and ITS-extraction steps, to allow for more divergent ITS sequences.
 * Please suggest further improvements [here](https://github.com/tage-ro/denim/issues).
