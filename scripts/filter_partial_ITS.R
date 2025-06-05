@@ -1,13 +1,12 @@
+# R script to remove partial ITS1/ITS2 sequences
 args = commandArgs(trailingOnly=TRUE)
 
 sequences <- Biostrings::readDNAStringSet(args[1])
 seqnames <- names(sequences)
 
-contig_length <- gsub("^.*length\\_", "", seqnames)
-contig_length <- gsub("\\_.*", "", contig_length)
+contig_length <- gsub("(^.*length\\_)|(_.*$)", "", seqnames)
 
-span <- gsub(".*sequence ", "", seqnames)
-span <- gsub(" \\(.*", "", span)
+span <- gsub("(^.*sequence )|( .*$)", "", seqnames)
 span <- as.data.frame(strsplit(span, "-"))
 
 positions <- data.frame(start_seq = as.character(span[1,]), end_seq = as.character(span[2,]), start_cont = "1", end_cont = contig_length)
