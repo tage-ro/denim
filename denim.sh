@@ -117,7 +117,9 @@ rm -r ${TMP_DIR}
 
 # Filter out ITS1/ITS2 sequences that were detected on edges of contigs, and may thus be incomplete (WARNING: currently slow)
 if [ $GET_COMPLETE == TRUE ]; then
+  echo "Filtering out complete ITS1 sequences"
   Rscript scripts/filter_partial_ITS.R ${OUT}/${NAME}.ITS1.fasta
+  echo "Filtering out complete ITS2 sequences"
   Rscript scripts/filter_partial_ITS.R ${OUT}/${NAME}.ITS2.fasta
 fi
 
