@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Help message
-USAGE="Usage: denim.sh -f FORWARD_READS -r REVERSE_READS -d DATABASE_FILE [-o OUTPUT_DIRECTORY -t THREADS -n N_READS -w WORKING_DIRECTORY -c]
+USAGE="Usage: denim.sh -f FORWARD_READS -r REVERSE_READS -d DATABASE_FILE [-o OUTPUT_DIRECTORY -t THREADS -n N_READS -w WORKING_DIRECTORY -i MINIMUM_IDENTITY -c]
 Required arguments:
 -f Forward reads in fastq/fastq.gz format
 -r Reverse reads in fastq/fastq.gz format
@@ -12,6 +12,7 @@ Optional arguments:
 -t Threads to use (default = 8)
 -n Reads pairs to process (default = 10 000 000)
 -w Working directory (default = output_director/tmp)
+-i Minimum identity for mapping step (default = 0.5/50%)
 -c Filter out complete (not bordering contig edges) ITS1/ITS2 sequences (default = not executed)
 
 Using the dev-version of the UNITE database may allow assembly of ITS-adjacent regions, possibly increasing the likelyhood of attaining full-length ITS sequences.
@@ -29,10 +30,11 @@ THREADS=8
 N_READS=10000000
 TMP_DIR=-1
 OUTPUT_DIR="denim_out"
+IDENTITY=0.5
 GET_COMPLETE=FALSE
 
 # Read options and corresponding values
-while getopts "f:r:d:o:t:n:w:c" option; do
+while getopts "f:r:d:o:t:n:w:i:c" option; do
   case "$option" in
     f) READ_1=${OPTARG} ;; # Forward reads
     r) READ_2=${OPTARG} ;; # Reverse reads
@@ -40,7 +42,8 @@ while getopts "f:r:d:o:t:n:w:c" option; do
     o) OUTPUT_DIR=${OPTARG} ;; # Output directory (default = denim_out)
     t) THREADS=${OPTARG} ;; # Number of threads to use (default = 8 threads)
     n) N_READS=${OPTARG} ;; # Number of reads to process (default = 10 000 000 read pairs)
-    w) TMP_DIR=${OPTARG} ;; # Temporary working directory (default tmp directory in output directory)
+    w) TMP_DIR=${OPTARG} ;; # Temporary working directory (default = tmp directory in output directory)
+    i) IDENTITY=${OPTARG} ;; # Identity required for mapping step (default = 0.5 = 50%)
     c) GET_COMPLETE=TRUE ;;
     *) echo "Unrecognized input option given. Stopping analysis."
     exit;;
@@ -103,7 +106,7 @@ fastp --reads_to_process $N_READS -x -D --dup_calc_accuracy 1 -j ${TMP_DIR}/${NA
 
 # Mapping with bbmap
 bbmap.sh fast=t pairlen=1200 overwrite=t usejni=t ref=$DATABASE threads=$THREADS \
-minidentity=0.7 in=${TMP_DIR}/${NAME}_proc_1.fastq in2=${TMP_DIR}/${NAME}_proc_2.fastq \
+minidentity=$IDENTITY in=${TMP_DIR}/${NAME}_proc_1.fastq in2=${TMP_DIR}/${NAME}_proc_2.fastq \
 outm=${TMP_DIR}/${NAME}_mapped_1.fastq outm2=${TMP_DIR}/${NAME}_mapped_2.fastq
 
 # Assembly with metaspades (assuming 2 GB RAM available per thread)
