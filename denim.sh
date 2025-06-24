@@ -110,20 +110,21 @@ minidentity=$IDENTITY in=${TMP_DIR}/${NAME}_proc_1.fastq in2=${TMP_DIR}/${NAME}_
 outm=${TMP_DIR}/${NAME}_mapped_1.fastq outm2=${TMP_DIR}/${NAME}_mapped_2.fastq
 
 # Assembly with metaspades (assuming 2 GB RAM available per thread)
-spades.py --meta -t $(($THREADS/2)) -m $(($THREADS*2)) -1 ${TMP_DIR}/${NAME}_mapped_1.fastq -2 ${TMP_DIR}/${NAME}_mapped_2.fastq -o ${OUT}/spades
+spades.py --rna -t $THREADS -m $(($THREADS*2)) -1 ${TMP_DIR}/${NAME}_mapped_1.fastq -2 ${TMP_DIR}/${NAME}_mapped_2.fastq -o ${OUT}/spades
 
 # ITS extraction with ITSx
 ITSx --cpu $THREADS -i ${OUT}/spades/contigs.fasta -o ${OUT}/${NAME}
 
+# Filter out ITS1/ITS2 sequences that were detected on edges of contigs, and may thus be incomplete (only works with spades output)
+if [ $GET_COMPLETE == TRUE ]; then
+  awk -F "[_ -]" '$5!=$14 && $13!=1 {print}' ${OUT}/${NAME}.ITS1.fasta > ${TMP_DIR}/complete_seqs.txt
+  grep -A 1 -f ${TMP_DIR}/complete_seqs.txt --no-group-separator ${OUT}/${NAME}.ITS1.fasta > ${OUT}/${NAME}.ITS1.complete.fasta
+
+  awk -F "[_ -]" '$5!=$14 && $13!=1 {print}' ${OUT}/${NAME}.ITS2.fasta > ${TMP_DIR}/complete_seqs.txt
+  grep -A 1 -f ${TMP_DIR}/complete_seqs.txt --no-group-separator ${OUT}/${NAME}.ITS2.fasta > ${OUT}/${NAME}.ITS2.complete.fasta
+fi
+
 # Remove temporary files
 rm -r ${TMP_DIR}
-
-# Filter out ITS1/ITS2 sequences that were detected on edges of contigs, and may thus be incomplete (WARNING: currently slow)
-if [ $GET_COMPLETE == TRUE ]; then
-  echo "Filtering out complete ITS1 sequences"
-  Rscript scripts/filter_partial_ITS.R ${OUT}/${NAME}.ITS1.fasta
-  echo "Filtering out complete ITS2 sequences"
-  Rscript scripts/filter_partial_ITS.R ${OUT}/${NAME}.ITS2.fasta
-fi
 
 echo "Finished analysis of " $NAME " on " $(date)
