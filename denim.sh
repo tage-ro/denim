@@ -110,7 +110,7 @@ minidentity=$IDENTITY in=${TMP_DIR}/${NAME}_proc_1.fastq in2=${TMP_DIR}/${NAME}_
 outm=${TMP_DIR}/${NAME}_mapped_1.fastq outm2=${TMP_DIR}/${NAME}_mapped_2.fastq
 
 # Assembly with metaspades (assuming 2 GB RAM available per thread)
-spades.py --rna -t $THREADS -m $(($THREADS*2)) -1 ${TMP_DIR}/${NAME}_mapped_1.fastq -2 ${TMP_DIR}/${NAME}_mapped_2.fastq -o ${OUT}/spades
+spades.py --meta -t $THREADS -m $(($THREADS*2)) -1 ${TMP_DIR}/${NAME}_mapped_1.fastq -2 ${TMP_DIR}/${NAME}_mapped_2.fastq -o ${OUT}/spades
 
 # ITS extraction with ITSx
 ITSx --cpu $THREADS -i ${OUT}/spades/contigs.fasta -o ${OUT}/${NAME}
