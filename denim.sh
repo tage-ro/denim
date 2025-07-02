@@ -10,7 +10,7 @@ Required arguments:
 Optional arguments:
 -o Output directory (default = denim_out in current directory)
 -t Threads to use (default = 8)
--n Reads pairs to process (default = 10 000 000)
+-n Reads pairs to process (default = 10 000 000, -n 0 to use all reads)
 -w Working directory (default = output_director/tmp)
 -i Minimum identity for mapping step (default = 0.5/50%)
 -c Filter out complete (not bordering contig edges) ITS1/ITS2 sequences (default = not executed)
@@ -101,8 +101,13 @@ fi
 echo "Starting analysis of " $NAME " on " $(date)
 
 # Quality control with fastp
-fastp --reads_to_process $N_READS -x -D --dup_calc_accuracy 1 -j ${TMP_DIR}/${NAME}.json -h ${TMP_DIR}/${NAME}.html \
+if [ $N_READS == 0 ]; then
+  fastp -x -D --dup_calc_accuracy 1 -j ${TMP_DIR}/${NAME}.json -h ${TMP_DIR}/${NAME}.html \
+    --thread $THREADS -i $READ_1 -I $READ_2 -o ${TMP_DIR}/${NAME}_proc_1.fastq -O ${TMP_DIR}/${NAME}_proc_2.fastq
+else
+  fastp --reads_to_process $N_READS -x -D --dup_calc_accuracy 1 -j ${TMP_DIR}/${NAME}.json -h ${TMP_DIR}/${NAME}.html \
   --thread $THREADS -i $READ_1 -I $READ_2 -o ${TMP_DIR}/${NAME}_proc_1.fastq -O ${TMP_DIR}/${NAME}_proc_2.fastq
+fi
 
 # Mapping with bbmap
 bbmap.sh fast=t pairlen=1200 overwrite=t usejni=t ref=$DATABASE threads=$THREADS \
