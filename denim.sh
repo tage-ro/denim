@@ -122,10 +122,10 @@ ITSx --cpu $THREADS -i ${OUT}/spades/scaffolds.fasta -o ${OUT}/${NAME}
 
 # Filter out ITS1/ITS2 sequences that were detected on edges of contigs, and may thus be incomplete
 if [ $GET_COMPLETE == TRUE ]; then
-  awk -F "[_ -]" '$4!=$11 && $10!=1 {print}' ${OUT}/${NAME}.ITS1.fasta > ${TMP_DIR}/complete_seqs.txt
+  awk -F "\t" '($3 != "SSU: Not found") && ($5 != "5.8S: Not found") {print $1}' ${OUT}/${NAME}.positions.txt > ${TMP_DIR}/complete_seqs.txt
   grep -A 1 -f ${TMP_DIR}/complete_seqs.txt --no-group-separator ${OUT}/${NAME}.ITS1.fasta > ${OUT}/${NAME}.ITS1.complete.fasta
 
-  awk -F "[_ -]" '$4!=$11 && $10!=1 {print}' ${OUT}/${NAME}.ITS2.fasta > ${TMP_DIR}/complete_seqs.txt
+  awk -F "\t" '($7 != "LSU: Not found") && ($5 != "5.8S: Not found") {print $1}' ${OUT}/${NAME}.positions.txt > ${TMP_DIR}/complete_seqs.txt
   grep -A 1 -f ${TMP_DIR}/complete_seqs.txt --no-group-separator ${OUT}/${NAME}.ITS2.fasta > ${OUT}/${NAME}.ITS2.complete.fasta
 fi
 
