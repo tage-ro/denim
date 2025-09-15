@@ -5,5 +5,5 @@ channels:
 dependencies:
 - fastp=0.25.0
 - bbmap=39.26
-- spades=4.2.0
+- megahit=1.2.9
 - itsx=1.1.3
