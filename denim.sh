@@ -114,11 +114,11 @@ bbmap.sh fast=t pairlen=1200 overwrite=t usejni=t ref=$DATABASE threads=$THREADS
 minidentity=$IDENTITY in=${TMP_DIR}/${NAME}_proc_1.fastq in2=${TMP_DIR}/${NAME}_proc_2.fastq \
 outm=${TMP_DIR}/${NAME}_mapped_1.fastq outm2=${TMP_DIR}/${NAME}_mapped_2.fastq
 
-# Assembly with metaspades (assuming 2 GB RAM available per thread)
-spades.py --meta -t $THREADS -m $(($THREADS*2)) -1 ${TMP_DIR}/${NAME}_mapped_1.fastq -2 ${TMP_DIR}/${NAME}_mapped_2.fastq -o ${OUT}/spades
+# Assembly with megahit
+megahit -t $THREADS -1 ${TMP_DIR}/${NAME}_mapped_1.fastq -2 ${TMP_DIR}/${NAME}_mapped_2.fastq -o  ${OUT}/assembled --k-step 4
 
 # ITS extraction with ITSx
-ITSx --cpu $THREADS -i ${OUT}/spades/scaffolds.fasta -o ${OUT}/${NAME}
+ITSx --cpu $THREADS -i ${OUT}/assembled/final.contigs.fa -o ${OUT}/${NAME}
 
 # Filter out ITS1/ITS2 sequences that were detected on edges of contigs, and may thus be incomplete
 if [ $GET_COMPLETE == TRUE ]; then
