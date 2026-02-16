@@ -54,3 +54,6 @@ Denim is developed for paired Illumina reads from (meta)genomic samples. It will
 # Planned future additions
 * Iterative mode, where the resulting ITS sequences are appended to the ITS reference database.
 * Please suggest further improvements [here](https://github.com/tage-ro/denim/issues).
+
+# Have you found denim useful?
+Please cite the [article in ISME Communications](https://academic.oup.com/ismecommun/advance-article/doi/10.1093/ismeco/ycag019/8445430).
